@@ -1,0 +1,167 @@
+body {
+   font-family: monospace;
+   margin: 0;
+}
+
+#Navbar {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   background-color: rgb(255, 255, 255);
+   border-bottom: 8px solid rgb(255, 173, 49);
+}
+
+#Logo {
+   height: 100px;
+   width: auto;
+   margin: 20px;
+}
+
+#NavItems {
+   padding: 10px;
+   display: flex;
+   flex-direction: row;
+   justify-content: space-evenly;
+   gap: 30px;
+   transition: 0.3s;
+}
+
+
+#NavItems img {
+   height: 45px;
+   width: auto;
+}
+
+.nav-item {
+   transition: 0.3s;
+}
+
+.nav-item:hover {
+   cursor: pointer;
+   color: rgb(158, 158, 158);
+   transition: 0.3s;
+   transform: translateY(-3px);
+}
+
+/*
+      
+*/
+
+#TopContent {
+   padding: 100px 0 100px 0;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   background-color: rgb(239, 239, 239);
+}
+
+#searchBox {
+   display: flex;
+   flex-direction: row;
+   border: 3px solid rgba(182, 182, 182, 0.8);
+   border-radius: 5px;
+}
+
+#searchButton {
+   padding: 3px;
+   background-color: rgba(53, 53, 53, 0.8);
+   border-top-right-radius: 2px;
+   border-bottom-right-radius: 2px;
+}
+
+#searchButton:hover {
+   cursor: pointer;
+}
+
+#searchInput {
+   padding: 10px;
+   border: none;
+   border-bottom-left-radius: 3px;
+   border-top-left-radius: 3px;
+}
+
+#ToolsContent {
+   align-items: center;
+   justify-content: center;
+   display: grid;
+   grid-template-columns: auto auto auto;
+   margin: 50px 100px 50px 100px;
+   gap: 100px;
+}
+
+#CenterContent {
+   display: flex;
+   flex-direction: column;
+}
+
+#viewToolsButton {
+   font-size: 20px;
+   font-weight: 600;
+   border: none;
+   background-color: rgb(255, 173, 49);
+   color: rgb(255, 255, 255);
+   border-radius: 6px;
+   padding: 15px 20px 15px 20px;
+   margin-bottom: 100px;
+   transition: 0.3s;
+}
+
+#viewToolsButton:hover {
+   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+   transform: translateY(-1px);
+   transition: 0.3s;
+}
+
+.ToolCat {
+   display: flex;
+
+   /*padding: 2px;
+   */
+   padding: 20px;
+}
+
+.ToolCat img {
+   max-height: 300px;
+   min-height: 100px;
+   width: auto;
+   border-radius: 10px;
+}
+
+#viewToolsButton {
+   align-self: center;
+   justify-self: ce;
+}
+
+#BottomContent {
+   background-color: rgb(239, 239, 239);
+   justify-items: center;
+   align-items: center;
+   padding: 50px 0 100px 0;
+}
+
+#displayCards {
+   padding-top: 20px;
+   display: grid;
+   grid-template-columns: auto auto auto;
+   gap: 50px;
+}
+
+.displayCard {
+   align-items: center;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   background-color: rgb(246, 246, 246);
+   padding: 5px 10px 5px 10px;
+   border: solid 2px rgb(227, 227, 227);
+   border-radius: 5px;
+   max-width: 200px;
+   text-align: center;
+}
+
+.ToolCat.selected img {
+   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+   transform: translateY(-3px);
+   transition: 0.3s;
+}
