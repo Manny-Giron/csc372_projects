@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Tool Categories | Rocket Rentals</title>
+   <link rel="stylesheet" href="css/toolCategories.css" />
+</head>
+
+<body>
+   <!-- Emmanuel Giron | Feb 9, 2026
+       Tool Categories landing page. Displays category navigation and featured categories.
+       (AI-assisted suggestion) Layout structure, accessibility, and JS for active state + simple filtering.
+  -->
+
+   <div id="Navbar">
+      <img id="Logo" src="../documentation/logo.png" alt="Rocket Rentals logo" />
+      <div id="NavItems">
+         <h2 class="nav-item"><a href="index.html">Home</a></h2>
+         <h2 class="nav-item current-page"><a href="toolCategories.html" aria-current="page">Tools</a></h2>
+         <div class="nav-item" aria-label="Cart">
+            <a href="cart.html">
+               <img
+                  src="https://media.istockphoto.com/id/1206806317/vector/shopping-cart-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=1RRQJs5NDhcB67necQn1WCpJX2YMfWZ4rYi1DFKlkNA="
+                  alt="Shopping cart icon" />
+            </a>
+         </div>
+      </div>
+   </div>
+
+   <main id="ToolCategoriesPage">
+      <header class="page-hero">
+         <h1>Browse Tools by Category</h1>
+         <p class="subtext">
+            Delivery + pickup tool rentals. These categories are placeholders until we connect our real inventory
+            database.
+         </p>
+      </header>
+
+      <section class="categories-layout" aria-label="Tool categories layout">
+         <!-- LEFT SIDEBAR -->
+         <aside class="category-sidebar" aria-label="Tool category navigation">
+            <div class="sidebar-title-row">
+               <h2 class="sidebar-title">Categories</h2>
+               <span class="sidebar-badge" aria-label="Placeholder data badge">Placeholder</span>
+            </div>
+
+            <nav class="category-nav">
+               <!-- These link to future category pages you’ll build next -->
+               <a class="category-link active" href="toolCategories.html" data-cat="all">All Categories</a>
+               <a class="category-link" href="category_powertools.html" data-cat="power">Power Tools</a>
+               <a class="category-link" href="category_lawn.html" data-cat="lawn">Lawn & Outdoor</a>
+               <a class="category-link" href="category_masonry.html" data-cat="masonry">Concrete & Masonry</a>
+               <a class="category-link" href="category_cleaning.html" data-cat="cleaning">Cleaning</a>
+               <a class="category-link" href="category_ladders.html" data-cat="ladders">Ladders & Lifts</a>
+               <a class="category-link" href="category_trailers.html" data-cat="trailers">Trailers & Hauling</a>
+            </nav>
+
+            <div class="sidebar-help" role="note">
+               <p><strong>Note:</strong> Each category will have its own page for now (static HTML), until we add a
+                  backend.</p>
+            </div>
+         </aside>
+
+         <!-- RIGHT CONTENT -->
+         <div class="category-content">
+            <div class="content-toolbar">
+               <h2 id="contentTitle">Featured Categories</h2>
+
+               <!-- simple interactivity: filter cards by search -->
+               <div class="search-wrap">
+                  <label for="categorySearch" class="sr-only">Search categories</label>
+                  <input id="categorySearch" type="text" placeholder="Search categories..." />
+               </div>
+            </div>
+
+            <p class="content-desc">
+               Choose a category to see placeholder tool listings. Later, this will display real inventory and
+               availability.
+            </p>
+
+            <div class="category-grid" id="categoryGrid">
+               <!-- Cards are clickable and route to individual category pages -->
+               <a class="category-card" href="category_powertools.html" data-name="Power Tools">
+                  <div class="card-top">
+                     <h3>Power Tools</h3>
+                     <span class="pill">Most Popular</span>
+                  </div>
+                  <p>Drills, saws, sanders, nailers, and more.</p>
+                  <ul class="mini-list" aria-label="Example tools">
+                     <li>Impact Driver (placeholder)</li>
+                     <li>Circular Saw (placeholder)</li>
+                     <li>Rotary Hammer (placeholder)</li>
+                  </ul>
+                  <span class="card-cta">View tools →</span>
+               </a>
+
+               <a class="category-card" href="category_lawn.html" data-name="Lawn & Outdoor">
+                  <div class="card-top">
+                     <h3>Lawn & Outdoor</h3>
+                  </div>
+                  <p>Seasonal equipment for yard projects.</p>
+                  <ul class="mini-list" aria-label="Example tools">
+                     <li>Tiller (placeholder)</li>
+                     <li>Leaf Blower (placeholder)</li>
+                     <li>Brush Cutter (placeholder)</li>
+                  </ul>
+                  <span class="card-cta">View tools →</span>
+               </a>
+
+               <a class="category-card" href="category_masonry.html" data-name="Concrete & Masonry">
+                  <div class="card-top">
+                     <h3>Concrete & Masonry</h3>
+                  </div>
+                  <p>Mixing, cutting, and surface prep equipment.</p>
+                  <ul class="mini-list" aria-label="Example tools">
+                     <li>Concrete Mixer (placeholder)</li>
+                     <li>Wet Saw (placeholder)</li>
+                     <li>Angle Grinder (placeholder)</li>
+                  </ul>
+                  <span class="card-cta">View tools →</span>
+               </a>
+
+               <a class="category-card" href="category_cleaning.html" data-name="Cleaning">
+                  <div class="card-top">
+                     <h3>Cleaning</h3>
+                  </div>
+                  <p>For jobsite cleanup, garages, and home refresh.</p>
+                  <ul class="mini-list" aria-label="Example tools">
+                     <li>Pressure Washer (placeholder)</li>
+                     <li>Shop Vac (placeholder)</li>
+                     <li>Carpet Cleaner (placeholder)</li>
+                  </ul>
+                  <span class="card-cta">View tools →</span>
+               </a>
+
+               <a class="category-card" href="category_ladders.html" data-name="Ladders & Lifts">
+                  <div class="card-top">
+                     <h3>Ladders & Lifts</h3>
+                  </div>
+                  <p>Reach higher safely (delivery-only).</p>
+                  <ul class="mini-list" aria-label="Example tools">
+                     <li>Extension Ladder (placeholder)</li>
+                     <li>Step Ladder (placeholder)</li>
+                     <li>Scaffold (placeholder)</li>
+                  </ul>
+                  <span class="card-cta">View tools →</span>
+               </a>
+
+               <a class="category-card" href="category_trailers.html" data-name="Trailers & Hauling">
+                  <div class="card-top">
+                     <h3>Trailers & Hauling</h3>
+                  </div>
+                  <p>Move materials, equipment, and debris.</p>
+                  <ul class="mini-list" aria-label="Example tools">
+                     <li>Utility Trailer (placeholder)</li>
+                     <li>Dump Trailer (placeholder)</li>
+                     <li>Hand Truck (placeholder)</li>
+                  </ul>
+                  <span class="card-cta">View tools →</span>
+               </a>
+            </div>
+
+            <footer class="page-footer">
+               <p>
+                  Want to request a category? Email us (placeholder): <a
+                     href="mailto:rocketrentals@example.com">rocketrentals@example.com</a>
+               </p>
+            </footer>
+         </div>
+      </section>
+   </main>
+
+   <!-- JS: active nav highlight + category search filter -->
+   <script src="js/toolCategories.js"></script>
+</body>
+
+</html>

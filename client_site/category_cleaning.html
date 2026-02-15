@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Cleaning | Rocket Rentals</title>
+   <link rel="stylesheet" href="css/category_page.css" />
+</head>
+
+<body>
+   <!-- 
+       Reuses entire categories page layout: left sidebar stays, right side shows tool cards for this category.
+  -->
+
+   <div id="Navbar">
+      <img id="Logo" src="../documentation/logo.png" alt="Rocket Rentals logo" />
+      <div id="NavItems">
+         <h2 class="nav-item"><a href="index.html">Home</a></h2>
+         <h2 class="nav-item current-page"><a href="toolCategories.html">Tools</a></h2>
+         <div class="nav-item" aria-label="Cart">
+            <a href="cart.html">
+               <img
+                  src="https://media.istockphoto.com/id/1206806317/vector/shopping-cart-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=1RRQJs5NDhcB67necQn1WCpJX2YMfWZ4rYi1DFKlkNA="
+                  alt="Shopping cart icon" />
+            </a>
+         </div>
+      </div>
+   </div>
+
+   <main id="CategoryPage">
+      <header class="page-hero">
+         <h1 id="categoryTitle">Cleaning & Floor Care</h1>
+         <p class="subtext" id="categorySubtitle">
+            Placeholder listings for now — later this will show real availability + pricing.
+         </p>
+      </header>
+
+      <section class="categories-layout" aria-label="Tool category layout">
+         <!-- LEFT SIDEBAR (keep same as categories page) -->
+         <aside class="category-sidebar" aria-label="Tool category navigation">
+            <div class="sidebar-title-row">
+               <h2 class="sidebar-title">Categories</h2>
+               <span class="sidebar-badge" aria-label="Placeholder data badge">Placeholder</span>
+            </div>
+
+            <nav class="category-nav">
+               <a class="category-link" href="toolCategories.html" data-cat="all">All Categories</a>
+               <a class="category-link" href="category_powertools.html" data-cat="power">Power Tools</a>
+               <a class="category-link" href="category_lawn.html" data-cat="lawn">Lawn & Outdoor</a>
+               <a class="category-link" href="category_masonry.html" data-cat="masonry">Concrete & Masonry</a>
+               <a class="category-link" href="category_cleaning.html" data-cat="cleaning">Cleaning</a>
+               <a class="category-link" href="category_ladders.html" data-cat="ladders">Ladders & Lifts</a>
+               <a class="category-link" href="category_trailers.html" data-cat="trailers">Trailers & Hauling</a>
+            </nav>
+
+            <div class="sidebar-help" role="note">
+               <p><strong>Note:</strong> This category page is static for now. We’ll connect real inventory later.</p>
+            </div>
+
+         </aside>
+
+         <!-- RIGHT CONTENT (tools instead of categories) -->
+         <div class="category-content">
+            <div class="content-toolbar">
+               <h2 id="contentTitle">Tools in this category</h2>
+
+               <div class="toolbar-actions">
+                  <div class="search-wrap">
+                     <label for="toolSearch" class="sr-only">Search tools</label>
+                     <input id="toolSearch" type="text" placeholder="Search tools..." />
+                  </div>
+
+                  <div class="sort-wrap">
+                     <label for="toolSort" class="sr-only">Sort tools</label>
+                     <select id="toolSort">
+                        <option value="featured" selected>Sort: Featured</option>
+                        <option value="name-asc">Name (A–Z)</option>
+                        <option value="name-desc">Name (Z–A)</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+
+            <p class="content-desc">
+               Click a tool to view details later (placeholder). This will eventually connect to our inventory system.
+            </p>
+
+            <div class="tool-grid" id="toolGrid">
+               <!-- TOOL CARDS (placeholder content; personalize per category) -->
+               <a class="tool-card" href="#" data-name="Impact Driver" data-featured="true">
+                  <div class="card-top">
+                     <h3>Square Buff Sander</h3>
+                     <span class="pill">Featured</span>
+                  </div>
+                  <p>Great beginner sander for interior hardwood floors.</p>
+
+                  <div class="tool-meta" aria-label="Tool metadata">
+                     <span class="meta-item">Daily: $XX</span>
+                     <span class="meta-dot">•</span>
+                     <span class="meta-item">Deposit: $XX</span>
+                  </div>
+
+                  <div class="card-cta-row">
+                     <span class="card-cta">View details →</span>
+                     <button class="btn-add" type="button" aria-label="Add Impact Driver to cart (placeholder)">
+                        Add
+                     </button>
+                  </div>
+               </a>
+
+               <a class="tool-card" href="#" data-name="Circular Saw" data-featured="true">
+                  <div class="card-top">
+                     <h3>Floor Maintainer</h3>
+                     <span class="pill">Popular</span>
+                  </div>
+                  <p>Buff, Polish, Strip all kind of floorss.</p>
+
+                  <div class="tool-meta" aria-label="Tool metadata">
+                     <span class="meta-item">Daily: $XX</span>
+                     <span class="meta-dot">•</span>
+                     <span class="meta-item">Deposit: $XX</span>
+                  </div>
+
+                  <div class="card-cta-row">
+                     <span class="card-cta">View details →</span>
+                     <button class="btn-add" type="button" aria-label="Add Circular Saw to cart (placeholder)">
+                        Add
+                     </button>
+                  </div>
+               </a>
+
+               <a class="tool-card" href="#" data-name="Rotary Hammer" data-featured="false">
+                  <div class="card-top">
+                     <h3>Backpack Vacuum</h3>
+                  </div>
+                  <p>Vacuum on the go.</p>
+
+                  <div class="tool-meta" aria-label="Tool metadata">
+                     <span class="meta-item">Daily: $XX</span>
+                     <span class="meta-dot">•</span>
+                     <span class="meta-item">Deposit: $XX</span>
+                  </div>
+
+                  <div class="card-cta-row">
+                     <span class="card-cta">View details →</span>
+                     <button class="btn-add" type="button" aria-label="Add Rotary Hammer to cart (placeholder)">
+                        Add
+                     </button>
+                  </div>
+               </a>
+            </div>
+
+            <footer class="page-footer">
+               <p>
+                  Need something specific? Request a tool (placeholder): <a
+                     href="mailto:rocketrentals@example.com">rocketrentals@example.com</a>
+               </p>
+            </footer>
+         </div>
+      </section>
+   </main>
+
+   <script src="js/category_page.js"></script>
+</body>
+
+</html>

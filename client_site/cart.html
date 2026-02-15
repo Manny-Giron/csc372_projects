@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Emmanuel Giron | Feb 12, 2026
+       Cart + Checkout + Scheduling scaffold (mock data).
+       Flow: Cart -> Schedule -> Delivery -> Review/Confirm
+
+       USE OF AI: Because of the complexities (and future refactoring to react) - 
+       - GPT developed the scaffold for me given my requirements, process, and design expected for the page.
+         Actual functionality (JS / CSS) was mostly me.
+  -->
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Cart | Rocket Rentals</title>
+   <link rel="stylesheet" href="css/cart.css" />
+</head>
+
+<body>
+
+
+   <div id="Navbar">
+      <img id="Logo" src="../documentation/logo.png" alt="Rocket Rentals logo" />
+      <div id="NavItems">
+         <h2 class="nav-item"><a href="index.html">Home</a></h2>
+         <h2 class="nav-item"><a href="toolCategories.html">Tools</a></h2>
+         <div class="nav-item current-page" aria-label="Cart">
+            <a href="cart.html" aria-current="page">
+               <img
+                  src="https://media.istockphoto.com/id/1206806317/vector/shopping-cart-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=1RRQJs5NDhcB67necQn1WCpJX2YMfWZ4rYi1DFKlkNA="
+                  alt="Shopping cart icon" />
+            </a>
+         </div>
+      </div>
+   </div>
+
+   <main id="CartPage">
+      <header class="page-hero">
+         <h1>Your Cart</h1>
+         <p class="subtext">
+            Reserve tools for delivery + pickup. Everything here is placeholder until we connect real inventory +
+            pricing.
+         </p>
+      </header>
+
+      <!-- Progress / Steps -->
+      <section class="stepper" aria-label="Checkout steps">
+         <div class="step active" data-step="1">
+            <span class="step-num">1</span>
+            <span class="step-label">Cart</span>
+         </div>
+         <div class="step" data-step="2">
+            <span class="step-num">2</span>
+            <span class="step-label">Schedule</span>
+         </div>
+         <div class="step" data-step="3">
+            <span class="step-num">3</span>
+            <span class="step-label">Delivery</span>
+         </div>
+         <div class="step" data-step="4">
+            <span class="step-num">4</span>
+            <span class="step-label">Review</span>
+         </div>
+      </section>
+
+      <section class="checkout-layout" aria-label="Cart and checkout layout">
+         <!-- LEFT: main content (steps) -->
+         <div class="checkout-main">
+            <!-- +=+=+=+=+=+=+=+=+= -->
+            <!-- STEP 1: CART -->
+            <!-- +=+=+=+=+=+=+=+=+= -->
+            <section class="panel active" id="stepCart" aria-label="Cart step">
+               <div class="panel-header">
+                  <h2>Cart Items</h2>
+                  <span class="badge">Mock Data</span>
+               </div>
+
+               <div id="cartEmpty" class="empty-state" hidden>
+                  <h3>Your cart is empty</h3>
+                  <p>Go browse tools and add a few rentals.</p>
+                  <a class="btn" href="toolCategories.html">Browse tools</a>
+               </div>
+
+               <div class="cart-list" id="cartList" aria-label="Cart items">
+                  <!-- JS renders rows for me -->
+               </div>
+
+               <div class="panel-actions">
+                  <a class="btn secondary" href="toolCategories.html">Continue shopping</a>
+                  <button class="btn" id="toScheduleBtn" type="button">Continue →</button>
+               </div>
+            </section>
+            <!-- +=+=+=+=+=+=+=+=+= -->
+            <!-- STEP 2: SCHEDULE -->
+            <!-- +=+=+=+=+=+=+=+=+= -->
+            <section class="panel" id="stepSchedule" aria-label="Schedule step" hidden>
+               <div class="panel-header">
+                  <h2>Schedule Your Rental</h2>
+                  <span class="badge">Placeholder</span>
+               </div>
+
+               <p class="panel-desc">
+                  Pick your delivery time and your pickup time. We’ll calculate the rental duration (placeholder
+                  pricing).
+               </p>
+
+               <div class="form-grid">
+                  <div class="form-field">
+                     <label for="deliveryDate">Delivery date</label>
+                     <input type="date" id="deliveryDate" />
+                  </div>
+
+                  <div class="form-field">
+                     <label for="deliveryTime">Delivery time</label>
+                     <input type="time" id="deliveryTime" />
+                     <p class="field-hint">Example: 9:00 AM – 6:00 PM delivery window (placeholder)</p>
+                  </div>
+
+                  <div class="form-field">
+                     <label for="pickupDate">Pickup date</label>
+                     <input type="date" id="pickupDate" />
+                  </div>
+
+                  <div class="form-field">
+                     <label for="pickupTime">Pickup time</label>
+                     <input type="time" id="pickupTime" />
+                     <p class="field-hint">Pickup must be after delivery (we’ll validate this)</p>
+                  </div>
+
+                  <div class="form-field full">
+                     <label for="notes">Notes for delivery/pickup (optional)</label>
+                     <textarea id="notes" rows="3"
+                        placeholder="Gate code, parking note, call on arrival, etc."></textarea>
+                  </div>
+               </div>
+
+               <div class="notice" id="scheduleNotice" role="note">
+                  <strong>Heads up:</strong> This is a scaffold. In the real build we’ll block unavailable times based
+                  on inventory.
+               </div>
+
+               <div class="panel-actions">
+                  <button class="btn secondary" id="backToCartBtn" type="button">← Back</button>
+                  <button class="btn" id="toDeliveryBtn" type="button">Continue →</button>
+               </div>
+            </section>
+            <!-- +=+=+=+=+=+=+=+=+= -->
+            <!-- STEP 3: DELIVERY -->
+            <!-- +=+=+=+=+=+=+=+=+= -->
+            <section class="panel" id="stepDelivery" aria-label="Delivery step" hidden>
+               <div class="panel-header">
+                  <h2>Delivery Details</h2>
+                  <span class="badge">API Placeholder</span>
+               </div>
+
+               <p class="panel-desc">
+                  Enter the drop-off location. Later we’ll validate it using the Google Maps API (autocomplete +
+                  verification).
+               </p>
+
+               <div class="form-grid">
+                  <div class="form-field full">
+                     <label for="deliveryName">Full name</label>
+                     <input id="deliveryName" type="text" placeholder="First Last" />
+                  </div>
+
+                  <div class="form-field full">
+                     <label for="deliveryPhone">Phone number</label>
+                     <input id="deliveryPhone" type="tel" placeholder="(401) 555-1234" />
+                  </div>
+
+                  <div class="form-field full">
+                     <label for="deliveryAddressEl">Delivery address</label>
+                     <div id="deliveryAddressEl"></div>
+
+                     <p class="field-hint">
+                        Powered by Google Places Autocomplete (new element).
+                     </p>
+                     <input id="deliveryAddress" type="hidden" />
+                  </div>
+
+                  <div class="form-field">
+                     <label for="deliveryUnit">Unit / Apt (optional)</label>
+                     <input id="deliveryUnit" type="text" placeholder="Apt 2B" />
+                  </div>
+
+                  <div class="form-field">
+                     <label for="deliveryZip">ZIP code</label>
+                     <input id="deliveryZip" type="text" placeholder="02881" />
+                  </div>
+               </div>
+
+               <div class="api-box" aria-label="API validation box">
+                  <h3>Address Verification (Google Maps API)</h3>
+                  <p class="api-sub">
+                     Placeholder: click “Verify Address” to simulate a valid address response.
+                  </p>
+
+                  <div class="api-actions">
+                     <button class="btn secondary" id="verifyAddressBtn" type="button">Verify Address</button>
+                     <span id="verifyStatus" class="status-pill" aria-live="polite">Not verified</span>
+                  </div>
+
+                  <div class="mini-note">
+                     In the real build, this will call Google Places / Geocoding and confirm the address is real +
+                     deliverable.
+                  </div>
+               </div>
+
+               <div class="panel-actions">
+                  <button class="btn secondary" id="backToScheduleBtn" type="button">← Back</button>
+                  <button class="btn" id="toReviewBtn" type="button">Continue →</button>
+               </div>
+            </section>
+            <!-- +=+=+=+=+=+=+=+=+= -->
+            <!-- STEP 4: REVIEW -->
+            <!-- +=+=+=+=+=+=+=+=+= -->
+            <section class="panel" id="stepReview" aria-label="Review step" hidden>
+               <div class="panel-header">
+                  <h2>Review & Confirm</h2>
+                  <span class="badge">Placeholder</span>
+               </div>
+
+               <p class="panel-desc">
+                  Review your tools, schedule, and delivery info. Confirm to place your reservation (mock).
+               </p>
+
+               <div class="review-grid">
+                  <div class="review-card">
+                     <h3>Tools</h3>
+                     <div id="reviewTools" class="review-block"></div>
+                  </div>
+
+                  <div class="review-card">
+                     <h3>Schedule</h3>
+                     <div id="reviewSchedule" class="review-block"></div>
+                  </div>
+
+                  <div class="review-card">
+                     <h3>Delivery</h3>
+                     <div id="reviewDelivery" class="review-block"></div>
+                  </div>
+               </div>
+
+               <div class="notice warn" id="reviewNotice" role="note">
+                  <strong>Reminder:</strong> Pricing is placeholder, and checkout does not process payment yet.
+               </div>
+
+               <div class="panel-actions">
+                  <button class="btn secondary" id="backToDeliveryBtn" type="button">← Back</button>
+                  <button class="btn" id="confirmBtn" type="button">Confirm reservation</button>
+               </div>
+
+               <div id="confirmResult" class="confirm-result" hidden>
+                  <h3>Reservation confirmed (mock)</h3>
+                  <p>
+                     We’d normally generate an order number and send a confirmation email/text here.
+                  </p>
+                  <a class="btn secondary" href="toolCategories.html">Back to tools</a>
+               </div>
+            </section>
+
+         </div>
+         <!-- +=+=+=+=+=+=+=+=+= -->
+         <!-- +=+=+=+=+=+=+=+=+= -->
+         <!-- RIGHT: order summary (always visible) -->
+         <aside class="checkout-summary" aria-label="Order summary">
+            <div class="summary-header">
+               <h2>Order Summary</h2>
+               <span class="badge">XX</span>
+            </div>
+
+            <div class="summary-section">
+               <h3>Totals (Placeholder)</h3>
+               <div class="summary-row">
+                  <span>Tools subtotal</span>
+                  <span id="subtotalVal">$XX.XX</span>
+               </div>
+               <div class="summary-row">
+                  <span>Delivery fee</span>
+                  <span id="deliveryFeeVal">$XX.XX</span>
+               </div>
+               <div class="summary-row">
+                  <span>Estimated deposit</span>
+                  <span id="depositVal">$XX.XX</span>
+               </div>
+               <div class="summary-divider"></div>
+               <div class="summary-row total">
+                  <span>Total (est.)</span>
+                  <span id="totalVal">$XX.XX</span>
+               </div>
+               <p class="summary-hint">
+                  Total is based on placeholder daily rates × rental length (calculated after you schedule).
+               </p>
+            </div>
+
+            <div class="summary-section">
+               <h3>Rental duration</h3>
+               <div class="summary-row">
+                  <span>Length</span>
+                  <span id="durationVal">—</span>
+               </div>
+               <p class="summary-hint">
+                  Once you pick delivery + pickup, we’ll estimate the number of days/hours.
+               </p>
+            </div>
+
+            <div class="summary-section">
+               <h3>Checkout requirements</h3>
+               <ul class="checklist">
+                  <li id="reqCart" class="ok">Cart has items</li>
+                  <li id="reqSchedule">Schedule selected</li>
+                  <li id="reqAddress">Address verified</li>
+               </ul>
+            </div>
+         </aside>
+      </section>
+   </main>
+
+   <script src="js/cart.js"></script>
+   <!-- Plz no steal key -->
+   <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })
+         ({ key: "AIzaSyC5amVyyAe-6obbh9xSsiAWZ2tC_rNOz5o", v: "weekly" });</script>
+</body>
+
+</html>
