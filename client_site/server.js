@@ -1,111 +1,173 @@
 /**
  * Emmanuel Giron
- * February 22, 2026
+ * CREATED: February 22, 2026
+ * UPDATED: March 1, 2026
  * Rocket Rentals - Node.js static file server (serves files from /public)
+ *  UPDATE: Refactored to use Express and Handlebars for dynamic rendering of views
  */
 
-const http = require("http");
-const fs = require("fs");
 const path = require("path");
+const express = require("express");
+const { engine } = require("express-handlebars");
 
-const PORT = 3000;
+const app = express();
 
-function getContentType(filePath) {
-   const ext = path.extname(filePath).toLowerCase();
+// Handlebars 
+app.engine(
+   "handlebars",
+   engine({
+      defaultLayout: "main",
+   })
+);
+app.set("view engine", "handlebars");
+app.set("views", path.join(__dirname, "views"));
 
-   // Sends the correct Content-Type header based on the file type
-   switch (ext) {
-      case ".html": return "text/html; charset=utf-8";
-      case ".css": return "text/css; charset=utf-8";
-      case ".js": return "text/javascript; charset=utf-8";
-      case ".json": return "application/json; charset=utf-8";
-      case ".png": return "image/png";
-      case ".jpg":
-      case ".jpeg": return "image/jpeg";
-      case ".gif": return "image/gif";
-      case ".svg": return "image/svg+xml";
-      case ".webp": return "image/webp";
-      case ".ico": return "image/x-icon";
-      default: return "application/octet-stream";
+// Static files setup (CSS/JS/images)
+app.use("/public", express.static(path.join(__dirname, "public")));
+
+const PORT = process.env.PORT || 3000;
+
+app.use((req, res, next) => {
+   let cleanPath = req.path.toLowerCase();
+
+   if (cleanPath.length > 1 && cleanPath.endsWith("/")) {
+      cleanPath = cleanPath.slice(0, -1);
    }
-}
-
-/**
- * Create a function named serveStaticFile that:
- * - Attempts to read the file at the given path
- * - Sets status code 200 when successful
- * - Sets status code 500 if a server error occurs
- * - Sends the correct Content-Type header based on the file type
- * - Sends the file data in the response
- */
-function serveStaticFile(res, filePath, statusCode = 200) {
-   fs.readFile(filePath, (err, data) => {
-      if (err) {
-         // Server error occurs (permissions, unexpected fs issues, etc.)
-         res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
-         res.end("500 - Server Error");
-         return;
-      }
-
-      res.writeHead(statusCode, { "Content-Type": getContentType(filePath) });
-      res.end(data);
-   });
-}
-
-// Absolute path to your /public folder
-const publicDir = path.join(__dirname, "public");
-
-const server = http.createServer((req, res) => {
-   // Normalize the URL path by:
-   // - removing query strings
-   // - removing trailing slashes (except "/")
-   // - converting to lowercase
-   let urlPath = req.url.split("?")[0].toLowerCase();
-
-   if (urlPath.length > 1 && urlPath.endsWith("/")) {
-      urlPath = urlPath.slice(0, -1);
+   if (cleanPath !== req.path) {
+      const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+      return res.redirect(301, cleanPath + qs);
    }
 
-   // maps clean routes to html files
-   // "/" -> "/index.html"
-   // "/about" -> "/about.html"
-   // "/css/styles.css" -> "/css/styles.css"
-   let filePath;
-
-   // If request looks like a file (has an extension), serve it directly
-   if (path.extname(urlPath)) {
-      filePath = path.join(publicDir, urlPath);
-   } else {
-      // If it's a route, map to an HTML file
-      if (urlPath === "/") {
-         filePath = path.join(publicDir, "index.html");
-      } else {
-         filePath = path.join(publicDir, `${urlPath}.html`);
-      }
-   }
-
-   if (!filePath.startsWith(publicDir)) {
-      const notFoundPath = path.join(publicDir, "404.html");
-      return serveStaticFile(res, notFoundPath, 404);
-   }
-
-   // Check existence; if missing, serve custom 404 page
-   fs.stat(filePath, (err, stats) => {
-      if (!err && stats.isFile()) {
-         return serveStaticFile(res, filePath, 200);
-      }
-
-      const notFoundPath = path.join(publicDir, "404.html");
-      fs.stat(notFoundPath, (nfErr, nfStats) => {
-         if (!nfErr && nfStats.isFile()) {
-            return serveStaticFile(res, notFoundPath, 404);
-         }
-         res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-         res.end("404 - Page Not Found");
-      });
+   next();
+});
+// =+=+=+=+=+=+=+=+=+=+=+=+=+=
+// =+=+=+=+=+=+=+=+=+=+=+=+=+=
+// Routes (render views)
+// =+=+=+=+=+=+=+=+=+=+=+=+=+=
+// =+=+=+=+=+=+=+=+=+=+=+=+=+=
+app.get("/", (req, res) => {
+   res.render("home", {
+      pageTitle: "Rocket Rentals",
+      year: new Date().getFullYear(),
+      isHome: true,
+      cssFiles: ["styles.css"],
+      jsFiles: ["homepage.js"],
    });
 });
 
-server.listen(PORT, () => {
+// =+=+=+=+=+=+=+=+=+=+=+=+=+=
+
+app.get("/cart", (req, res) => {
+   res.render("cart", {
+      pageTitle: "Cart",
+      year: new Date().getFullYear(),
+      isHome: false,
+      cssFiles: ["cart.css"],
+      jsFiles: ["cart.js"],
+   });
+});
+// =+=+=+=+=+=+=+=+=+=+=+=+=+=
+
+// For when i make the page
+// app.get("/about", (req, res) => {
+//   res.render("about", {
+//     pageTitle: "About",
+//     year: new Date().getFullYear(),
+//   });
+// });
+
+
+// =+=+=+=+=+=+=+=+=+=+=+=+=+=
+// Category pages
+//=+=+=+=+=+=+=+=+=+=+=+=+=+=
+app.get("/toolCategories", (req, res) => {
+   res.render("toolCategories", {
+      pageTitle: "Tool Categories",
+      year: new Date().getFullYear(),
+      isHome: false,
+      cssFiles: ["toolCategories.css"],
+      jsFiles: ["toolCategories.js"],
+   });
+});
+
+app.get("/category_cleaning", (req, res) => {
+   res.render("category_cleaning", {
+      pageTitle: "Cleaning Tools",
+      year: new Date().getFullYear(),
+      isHome: false,
+      cssFiles: ["category_page.css"],
+      jsFiles: ["category_page.js"],
+   });
+});
+app.get("/category_ladders", (req, res) => {
+   res.render("category_ladders", {
+      pageTitle: "Ladders & Lifts",
+      year: new Date().getFullYear(),
+      isHome: false,
+      cssFiles: ["category_page.css"],
+      jsFiles: ["category_page.js"],
+   });
+});
+
+app.get("/category_lawn", (req, res) => {
+   res.render("category_lawn", {
+      pageTitle: "Lawn & Outdoor Tools",
+      year: new Date().getFullYear(),
+      isHome: false,
+      cssFiles: ["category_page.css"],
+      jsFiles: ["category_page.js"],
+   });
+});
+
+app.get("/category_masonry", (req, res) => {
+   res.render("category_masonry", {
+      pageTitle: "Concrete & Masonry Tools",
+      year: new Date().getFullYear(),
+      isHome: false,
+      cssFiles: ["category_page.css"],
+      jsFiles: ["category_page.js"],
+   });
+});
+
+app.get("/category_powertools", (req, res) => {
+   res.render("category_powertools", {
+      pageTitle: "Power Tools",
+      year: new Date().getFullYear(),
+      isHome: false,
+      cssFiles: ["category_page.css"],
+      jsFiles: ["category_page.js"],
+   });
+});
+
+app.get("/category_trailers", (req, res) => {
+   res.render("category_trailers", {
+      pageTitle: "Trailers",
+      year: new Date().getFullYear(),
+      isHome: false,
+      cssFiles: ["category_page.css"],
+      jsFiles: ["category_page.js"],
+   });
+});
+
+//
+// 404 Page
+app.use((req, res) => {
+   res.status(404).render("404", {
+      pageTitle: "404 - Page Not Found",
+      year: new Date().getFullYear(),
+      url: req.originalUrl,
+   });
+});
+//
+// 500 Error Handler
+app.use((err, req, res, next) => {
+   console.error("500 error:", err);
+   res.status(500).render("500", {
+      pageTitle: "500 - Server Error",
+      year: new Date().getFullYear(),
+   });
+});
+
+app.listen(PORT, () => {
    console.log(`Server running at http://localhost:${PORT}`);
 });

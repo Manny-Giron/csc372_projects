@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>{{pageTitle}}</title>
+
+
+   {{#each cssFiles}}
+   <link rel="stylesheet" href="/public/css/{{this}}">
+   {{/each}}
+
+</head>
+
+<body>
+
+   {{!-- If homepage: render the special homepage navbar --}}
+   {{#if isHome}}
+   <div id="Navbar">
+      <img id="Logo" src="/public/images/logo.png" alt="Rocket Rentals logo">
+      <div id="NavItems">
+         <h2 class="nav-item">Home</h2>
+         <h2 class="nav-item">Tools</h2>
+         <h2 class="nav-item">How It Works</h2>
+         <h2 class="nav-item">About</h2>
+
+         <div class="nav-item" aria-label="Cart">
+            <a href="/cart">
+               <img
+                  src="https://media.istockphoto.com/id/1206806317/vector/shopping-cart-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=1RRQJs5NDhcB67necQn1WCpJX2YMfWZ4rYi1DFKlkNA="
+                  alt="Shopping cart icon" />
+            </a>
+         </div>
+      </div>
+   </div>
+
+   {{!-- Else: render the standard navbar used on all other pages --}}
+   {{else}}
+   <div id="Navbar">
+      <img id="Logo" src="/public/images/logo.png" alt="Rocket Rentals logo" />
+      <div id="NavItems">
+         <h2 class="nav-item"><a href="/">Home</a></h2>
+         <h2 class="nav-item current-page"><a href="/toolCategories">Tools</a></h2>
+         <div class="nav-item" aria-label="Cart">
+            <a href="/cart">
+               <img
+                  src="https://media.istockphoto.com/id/1206806317/vector/shopping-cart-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=1RRQJs5NDhcB67necQn1WCpJX2YMfWZ4rYi1DFKlkNA="
+                  alt="Shopping cart icon" />
+            </a>
+         </div>
+      </div>
+   </div>
+   {{/if}}
+
+   {{{body}}}
+
+   {{#each jsFiles}}
+   <script src="/public/js/{{this}}"></script>
+   {{/each}}
+
+</body>
+
+</html>
