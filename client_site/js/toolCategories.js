@@ -6,17 +6,17 @@ Description: This page handles basic UI interactivity for categories:
    - Category search filter for the featured cards
 */
 
-
 document.addEventListener("DOMContentLoaded", () => {
    // Highlight the sidebar link that matches the current page
    const links = document.querySelectorAll(".category-link");
    const currentFile = window.location.pathname.split("/").pop();
    console.log(currentFile);
+
    links.forEach((link) => {
       const hrefFile = (link.getAttribute("href") || "").split("/").pop();
 
-      // if we're on toolCategories.html, highlight "All Categories"
-      if (!currentFile || currentFile === "toolCategories.html") {
+      // if we're on toolCategories.php, highlight "All Categories"
+      if (!currentFile || currentFile === "toolCategories.php" || currentFile === "toolCategories.html") {
          if (link.dataset.cat === "all") link.classList.add("active");
          else link.classList.remove("active");
          return;
