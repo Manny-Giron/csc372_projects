@@ -353,7 +353,7 @@ $pageDescription = $categoryInfo[$selectedCategory]['description'];
          <h2 class="nav-item"><a href="../index.html">Home</a></h2>
          <h2 class="nav-item current-page"><a href="toolsCategories.php">Tools</a></h2>
          <div class="nav-item" aria-label="Cart">
-            <a href="../cart.html">
+            <a href="../checkout.php">
                <img
                   src="https://media.istockphoto.com/id/1206806317/vector/shopping-cart-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=1RRQJs5NDhcB67necQn1WCpJX2YMfWZ4rYi1DFKlkNA="
                   alt="Shopping cart icon" />
