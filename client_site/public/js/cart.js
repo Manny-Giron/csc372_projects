@@ -13,7 +13,6 @@ NOTE::::: As a temporary (future) solution when we have a working backend; Reser
  >> So incase you are wondering - no admin dashboard yet for this regard.
 */
 
-
 // IIFE approach, making functionality encapsulated in this scope, so future / other js files (running on the page) functionality do not clash.
 (function () {
    // Mock data

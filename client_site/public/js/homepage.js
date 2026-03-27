@@ -41,7 +41,7 @@ function handleSearch() {
       return;
    }
 
-   searchFeedback.textContent = `Searching for: "${query}"`;
+   window.location.href = `includes/tools.php?category=${query}`;
 }
 
 function handleNavScroll(labelText) {
