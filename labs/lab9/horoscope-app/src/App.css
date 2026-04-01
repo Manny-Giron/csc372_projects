@@ -1,0 +1,104 @@
+.content-box {
+  background-color: white;
+  border-radius: 25px;
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 30px 20px;
+  min-height: 500px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.content-box h1 {
+  text-align: center;
+  color: #9445b6;
+  margin-bottom: 30px;
+  font-family: "Press Start 2P", sans-serif;
+  font-size: 1.3rem;
+}
+
+.zodiac-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.zodiac-card {
+  background-color: #f8f4fc;
+  border-radius: 20px;
+  padding: 20px;
+  width: 250px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.zodiac-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.zodiac-card h3 {
+  color: #240c38;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.zodiac-card p {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+
+
+.zodiac-card {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.zodiac-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+}
+
+.horoscope-detail {
+  text-align: center;
+  padding: 20px;
+}
+
+.horoscope-detail img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.horoscope-detail h2 {
+  color: #240c38;
+  margin-bottom: 10px;
+}
+
+.horoscope-detail p {
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.ratings {
+  margin: 30px 0;
+}
+
+.ratings h3,
+.horoscope-text h3 {
+  color: #9445b6;
+  margin-bottom: 15px;
+}
+
+.ratings p {
+  font-size: 1.1rem;
+}
+
+.horoscope-text {
+  max-width: 700px;
+  margin: 0 auto;
+}
