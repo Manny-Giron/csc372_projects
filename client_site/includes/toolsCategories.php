@@ -3,14 +3,11 @@
 Name: Emmanuel Giron
 Date: March 7, 2026
 Description: Tool categories landing page for Rocket Rentals.
-This PHP version keeps the same page structure and styling as the static version,
-but now renders category data dynamically using PHP objects.
+Categories and sample tool names are now pulled from the database
+using PDO instead of hardcoded PHP arrays.
 */
 
-// AI-assistanced:
-// b/c of how many tools and categories there are, I used ChatGPT to help generate creations of the objects 
-// given the html files containing said data.
-// ALSO: GPT Helped me figure out the page query parameter. 
+require_once __DIR__ . '/db.php';
 
 /**
  * ToolCategory represents one visible category on the Rocket Rentals site.
@@ -79,48 +76,36 @@ class ToolCategory
 }
 
 /*
-Create category objects.
-These replace the repeated hard-coded category blocks from the static page.
+Query categories from the database and build ToolCategory objects.
+Sample tool names are pulled via GROUP_CONCAT through tool_types → tools.
 */
-$categories = [
-   new ToolCategory(
-      'Power Tools',
-      'power',
-      'Drills, saws, sanders, nailers, and more.',
-      ['Impact Driver (placeholder)', 'Circular Saw (placeholder)', 'Rotary Hammer (placeholder)'],
-      true
-   ),
-   new ToolCategory(
-      'Lawn & Outdoor',
-      'lawn',
-      'Seasonal equipment for yard projects.',
-      ['Tiller (placeholder)', 'Leaf Blower (placeholder)', 'Brush Cutter (placeholder)']
-   ),
-   new ToolCategory(
-      'Concrete & Masonry',
-      'masonry',
-      'Mixing, cutting, and surface prep equipment.',
-      ['Concrete Mixer (placeholder)', 'Wet Saw (placeholder)', 'Angle Grinder (placeholder)']
-   ),
-   new ToolCategory(
-      'Cleaning',
-      'cleaning',
-      'For jobsite cleanup, garages, and home refresh.',
-      ['Pressure Washer (placeholder)', 'Shop Vac (placeholder)', 'Carpet Cleaner (placeholder)']
-   ),
-   new ToolCategory(
-      'Ladders & Lifts',
-      'ladders',
-      'Reach higher safely (delivery-only).',
-      ['Extension Ladder (placeholder)', 'Step Ladder (placeholder)', 'Scaffold (placeholder)']
-   ),
-   new ToolCategory(
-      'Trailers & Hauling',
-      'trailers',
-      'Move materials, equipment, and debris.',
-      ['Utility Trailer (placeholder)', 'Dump Trailer (placeholder)', 'Hand Truck (placeholder)']
-   )
-];
+$catStmt = $pdo->query(
+   "SELECT tc.id, tc.`key`, tc.name, tc.description, tc.featured,
+           GROUP_CONCAT(t.name ORDER BY t.name SEPARATOR '||') AS sample_tools
+    FROM tool_categories tc
+    LEFT JOIN tool_types tt ON tt.category_id = tc.id
+    LEFT JOIN tools t       ON t.type_id = tt.id AND t.is_active = 1
+    GROUP BY tc.id
+    ORDER BY tc.sort_order"
+);
+$catRows = $catStmt->fetchAll();
+
+$categories = [];
+foreach ($catRows as $row) {
+   $sampleTools = [];
+   if (!empty($row['sample_tools'])) {
+      $allTools = explode('||', $row['sample_tools']);
+      $sampleTools = array_slice($allTools, 0, 3);
+   }
+
+   $categories[] = new ToolCategory(
+      $row['name'],
+      $row['key'],
+      $row['description'],
+      $sampleTools,
+      (bool) $row['featured']
+   );
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -158,8 +143,8 @@ $categories = [
       <header class="page-hero">
          <h1>Browse Tools by Category</h1>
          <p class="subtext">
-            Delivery + pickup tool rentals. These categories are placeholders until we connect our real inventory
-            database.
+            Delivery + pickup tool rentals. Browse our categories below to find the right equipment for your
+            project.
          </p>
       </header>
 
@@ -168,7 +153,7 @@ $categories = [
          <aside class="category-sidebar" aria-label="Tool category navigation">
             <div class="sidebar-title-row">
                <h2 class="sidebar-title">Categories</h2>
-               <span class="sidebar-badge" aria-label="Placeholder data badge">Placeholder</span>
+               <span class="sidebar-badge" aria-label="Live data badge">Live</span>
             </div>
 
             <nav class="category-nav">
@@ -184,8 +169,8 @@ $categories = [
 
             <div class="sidebar-help" role="note">
                <p>
-                  <strong>Note:</strong> Categories are now generated dynamically with PHP objects.
-                  Later, these can connect to a real backend and inventory database.
+                  <strong>Note:</strong> Categories are loaded from the database and rendered
+                  dynamically with PHP objects via PDO.
                </p>
             </div>
          </aside>
@@ -203,11 +188,13 @@ $categories = [
             </div>
 
             <p class="content-desc">
-               Choose a category to see placeholder tool listings. Later, this will display real inventory and
-               availability.
+               Choose a category to see available tool listings from our inventory.
             </p>
 
             <div class="category-grid" id="categoryGrid">
+               <?php if (empty($categories)): ?>
+                  <p>No categories are available at this time.</p>
+               <?php endif; ?>
                <?php foreach ($categories as $category): ?>
                   <!-- Objects are used here to dynamically render each category card -->
                   <a class="category-card" href="<?php echo htmlspecialchars($category->getCategoryUrl()); ?>"
