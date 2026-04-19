@@ -1,0 +1,236 @@
+/* App-level tweaks on top of legacy Rocket Rentals CSS */
+
+#root {
+  min-height: 100vh;
+}
+
+.nav-item-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-item-link h2 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.nav-user {
+  font-size: 0.85rem;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-logout {
+  font-family: inherit;
+  background: transparent;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.nav-logout:hover {
+  background: #f5f5f5;
+}
+
+.cart-nav {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ff8c00;
+  color: #fff;
+  border-radius: 999px;
+  min-width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-link {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 18px;
+  background: rgb(255, 173, 49);
+  color: #000;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.page-loading {
+  padding: 24px;
+}
+
+.page-pad {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.error-banner {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.auth-form input {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 4px;
+  padding: 8px;
+  font-family: inherit;
+}
+
+.btn-primary {
+  font-family: inherit;
+  background: #ff8c00;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.btn-primary:hover {
+  background: #e07800;
+}
+
+.tools-page {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  align-items: flex-start;
+}
+
+.tools-sidebar {
+  flex: 0 0 200px;
+}
+
+.tools-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tools-sidebar a.active {
+  font-weight: bold;
+  color: #ff8c00;
+}
+
+.tools-main {
+  flex: 1;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.tool-card {
+  border: 1px solid #eee;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.tool-card:hover {
+  border-color: #ff8c00;
+}
+
+.tool-rate {
+  font-weight: bold;
+}
+
+.tool-desc {
+  white-space: pre-wrap;
+}
+
+.add-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.cart-lines li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.checkout-link {
+  display: inline-block;
+  margin-top: 16px;
+}
+
+.checkout-wizard label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.checkout-wizard input,
+.checkout-wizard textarea {
+  display: block;
+  margin-top: 4px;
+  font-family: inherit;
+  padding: 6px;
+}
+
+.checkout-nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.admin-json {
+  background: #f8f8f8;
+  padding: 16px;
+  border-radius: 8px;
+  overflow: auto;
+}
+
+.fine-print {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.actions button {
+  margin-right: 6px;
+  font-family: inherit;
+  cursor: pointer;
+}
