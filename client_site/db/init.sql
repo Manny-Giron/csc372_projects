@@ -246,11 +246,12 @@ INSERT INTO `tools` (`type_id`, `name`, `slug`, `description`, `daily_rate`, `de
    (11, 'Shop Vac',          'shop-vac',          'Wet/dry vacuum for garages, workshops, and construction cleanup.',                       12.00,  35.00,  0),
    (12, 'Carpet Cleaner',    'carpet-cleaner',    'Deep-clean carpets and rugs for home refresh or move-out cleanup.',                      25.00,  60.00,  0),
    (13, 'Extension Ladder',  'extension-ladder',  'Tall ladder for exterior work, roofing access, and elevated repairs.',                   18.00,  50.00,  1),
-   (14, 'Step Ladder',       'step-ladder',       'Standard ladder for indoor tasks, painting, and maintenance work.',                      10.00,  30.00,  0),
-   (15, 'Scaffold',          'scaffold',          'Stable elevated work platform for larger painting and repair jobs.',                     55.00, 120.00,  1),
-   (16, 'Utility Trailer',   'utility-trailer',   'Trailer for hauling tools, lumber, yard waste, and light materials.',                    60.00, 150.00,  1),
-   (16, 'Dump Trailer',      'dump-trailer',      'Heavy-duty trailer for debris, demolition waste, and bulk materials.',                   95.00, 200.00,  1),
-   (17, 'Hand Truck',        'hand-truck',        'Manual moving support for appliances, boxes, and stacked materials.',                     8.00,  20.00,  0);
+   (13, 'Step Ladder',       'step-ladder',       'Standard ladder for indoor tasks, painting, and maintenance work.',                      10.00,  30.00,  0),
+   (14, 'Scaffold',          'scaffold',          'Stable elevated work platform for larger painting and repair jobs.',                     55.00, 120.00,  1),
+   -- 15 = trailers, 16 = hand-equipment (`tool_types` has exactly 16 rows → ids 1–16)
+   (15, 'Utility Trailer',   'utility-trailer',   'Trailer for hauling tools, lumber, yard waste, and light materials.',                    60.00, 150.00,  1),
+   (15, 'Dump Trailer',      'dump-trailer',      'Heavy-duty trailer for debris, demolition waste, and bulk materials.',                   95.00, 200.00,  1),
+   (16, 'Hand Truck',        'hand-truck',        'Manual moving support for appliances, boxes, and stacked materials.',                     8.00,  20.00,  0);
 
 CREATE TABLE `tool_units` (
    `id`                    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

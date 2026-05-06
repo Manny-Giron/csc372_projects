@@ -7,6 +7,8 @@ import catalogRoutes from './routes/catalog.js';
 import contractRoutes from './routes/contracts.js';
 import jobRoutes from './routes/jobs.js';
 import adminRoutes from './routes/admin.js';
+import staffRoutes from './routes/staff.js';
+import accountRoutes from './routes/account.js';
 
 dotenv.config();
 
@@ -25,10 +27,12 @@ app.use(express.json());
 app.get('/health', (_req, res) => res.json({ ok: true }));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/account', accountRoutes);
 app.use('/api', catalogRoutes);
 app.use('/api/rental-contracts', contractRoutes);
 app.use('/api/fulfillment-jobs', jobRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/staff', staffRoutes);
 
 app.listen(PORT, () => {
   console.log(`Rocket Rentals API listening on http://localhost:${PORT}`);

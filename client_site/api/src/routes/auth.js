@@ -6,7 +6,7 @@ import { requireAuth } from '../middleware.js';
 
 const router = Router();
 
-async function getUserWithRoles(userId) {
+export async function getUserWithRoles(userId) {
   const rows = await query(
     `SELECT u.id, u.email, u.is_active, r.name AS role_name
      FROM users u
@@ -68,7 +68,16 @@ router.post('/register', async (req, res) => {
     conn.release();
   }
 });
-
+////
+////
+////
+////
+////
+////
+////
+////
+////
+////
 router.post('/login', async (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) {
@@ -95,7 +104,16 @@ router.post('/login', async (req, res) => {
   });
   res.json({ token, user: { id: user.id, email: user.email, roles: user.roles } });
 });
-
+////
+////
+////
+////
+////
+////
+////
+////
+////
+////
 router.get('/me', requireAuth, async (req, res) => {
   const rows = await query(
     `SELECT first_name, last_name, phone FROM customer_profiles WHERE user_id = ? LIMIT 1`,

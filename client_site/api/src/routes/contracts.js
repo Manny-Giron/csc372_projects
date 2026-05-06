@@ -45,6 +45,17 @@ router.post('/', requireAuth, async (req, res) => {
     return res.status(400).json({ error: 'address required for delivery' });
   }
 
+  const startProbe = new Date(scheduledStart);
+  if (Number.isNaN(startProbe.getTime())) {
+    return res.status(400).json({ error: 'Invalid scheduledStart' });
+  }
+  const MIN_LEAD_MS = 4 * 60 * 60 * 1000;
+  if (startProbe.getTime() < Date.now() + MIN_LEAD_MS) {
+    return res.status(400).json({
+      error: 'Delivery must be scheduled at least 4 hours from now',
+    });
+  }
+
   const pool = getPool();
   const conn = await pool.getConnection();
 
@@ -277,6 +288,101 @@ router.get('/mine', requireAuth, async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Failed to load contracts' });
+  }
+});
+
+/** Customer self-service cancel (scheduled / confirmed only). Deposit policy by lead time. */
+router.post('/:id/cancel', requireAuth, async (req, res) => {
+  const id = Number(req.params.id);
+  if (!id) {
+    return res.status(400).json({ error: 'Invalid id' });
+  }
+  const pool = getPool();
+  const conn = await pool.getConnection();
+  try {
+    await conn.beginTransaction();
+    const [rows] = await conn.execute(
+      `SELECT id, status, scheduled_start, notes, customer_user_id
+       FROM rental_contracts WHERE id = ? FOR UPDATE`,
+      [id]
+    );
+    const c = rows[0];
+    if (!c) {
+      await conn.rollback();
+      return res.status(404).json({ error: 'Reservation not found' });
+    }
+    if (c.customer_user_id !== req.user.id) {
+      await conn.rollback();
+      return res.status(403).json({ error: 'Not your reservation' });
+    }
+    if (!['scheduled', 'confirmed'].includes(c.status)) {
+      await conn.rollback();
+      return res.status(400).json({
+        error: 'Only upcoming reservations can be cancelled here',
+      });
+    }
+
+    const start = new Date(c.scheduled_start);
+    if (Number.isNaN(start.getTime())) {
+      await conn.rollback();
+      return res.status(400).json({ error: 'Invalid schedule' });
+    }
+    const hoursUntil = (start.getTime() - Date.now()) / (1000 * 60 * 60);
+    if (hoursUntil <= 0) {
+      await conn.rollback();
+      return res.status(400).json({
+        error: 'This reservation has already started or ended. Contact us for help.',
+      });
+    }
+
+    const within24h = hoursUntil < 24;
+    const policyLine = within24h
+      ? 'Customer self-cancelled within 24h of scheduled delivery — deposit forfeited per policy.'
+      : 'Customer self-cancelled more than 24h before delivery — deposit refundable per policy (process refunds separately).';
+
+    const stamp = `Cancelled by customer (${req.user.email}) — ${policyLine}`;
+    const newNotes = c.notes ? `${c.notes}\n\n${stamp}` : stamp;
+
+    await conn.execute(
+      `UPDATE rental_contracts SET status = 'cancelled', notes = ? WHERE id = ?`,
+      [newNotes, id]
+    );
+    const [itemRows] = await conn.execute(
+      `SELECT id, tool_unit_id FROM rental_contract_items WHERE rental_contract_id = ?`,
+      [id]
+    );
+    for (const it of itemRows) {
+      await conn.execute(
+        `UPDATE rental_contract_items SET item_status = 'cancelled' WHERE id = ?`,
+        [it.id]
+      );
+      if (it.tool_unit_id) {
+        await conn.execute(
+          `UPDATE tool_units SET status = 'available' WHERE id = ? AND status = 'reserved'`,
+          [it.tool_unit_id]
+        );
+      }
+    }
+    await conn.execute(
+      `UPDATE contract_fulfillment_jobs
+       SET job_status = 'cancelled'
+       WHERE rental_contract_id = ? AND job_status IN ('unassigned', 'assigned')`,
+      [id]
+    );
+    await conn.commit();
+    res.json({
+      ok: true,
+      depositPolicy: within24h ? 'forfeited' : 'refundable',
+      message: within24h
+        ? 'Reservation cancelled. Your deposit is non-refundable for cancellations within 24 hours of delivery.'
+        : 'Reservation cancelled. Your deposit is eligible for refund per policy.',
+    });
+  } catch (e) {
+    await conn.rollback();
+    console.error(e);
+    res.status(500).json({ error: 'Could not cancel reservation' });
+  } finally {
+    conn.release();
   }
 });
 
