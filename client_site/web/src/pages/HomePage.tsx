@@ -1,6 +1,19 @@
-import { Link } from 'react-router-dom';
+import { useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function HomePage() {
+  const navigate = useNavigate();
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  function goSearch() {
+    const q = searchRef.current?.value.trim() ?? '';
+    if (q) {
+      navigate(`/tools?search=${encodeURIComponent(q)}`);
+    } else {
+      navigate('/tools');
+    }
+  }
+
   return (
     <>
       <div id="TopContent">
@@ -9,31 +22,28 @@ export function HomePage() {
         <p>Rent top-quality tools and equipment without leaving your home</p>
         <div id="searchBox">
           <input
+            ref={searchRef}
             id="searchInput"
+            name="q"
+            type="search"
+            autoComplete="off"
             placeholder="Search tools..."
+            aria-label="Search tools"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                const q = (e.target as HTMLInputElement).value.trim();
-                window.location.href = q
-                  ? `/tools?search=${encodeURIComponent(q)}`
-                  : '/tools';
+                e.preventDefault();
+                goSearch();
               }
             }}
           />
-          <Link
+          <button
+            type="button"
             id="searchButton"
-            to="/tools"
-            onClick={(e) => {
-              const input = document.getElementById('searchInput') as HTMLInputElement | null;
-              const q = input?.value.trim();
-              if (q) {
-                e.preventDefault();
-                window.location.href = `/tools?search=${encodeURIComponent(q)}`;
-              }
-            }}
+            aria-label="Search"
+            onClick={goSearch}
           >
             ?
-          </Link>
+          </button>
         </div>
       </div>
       <div id="CenterContent">
@@ -59,21 +69,26 @@ export function HomePage() {
         </Link>
       </div>
       <div id="BottomContent">
-        <h1>How It Works</h1>
+        <h1>How it works</h1>
         <div id="displayCards">
           <div className="displayCard">
-            <h3>Choose Your Tools</h3>
+            <h3>Choose your tools</h3>
             <p>Search through our catalog of options that suit your project.</p>
           </div>
           <div className="displayCard">
-            <h3>Request Your Delivery</h3>
+            <h3>Request your delivery</h3>
             <p>Enter your delivery address and instructions.</p>
           </div>
           <div className="displayCard">
-            <h3>Get Your Rental</h3>
+            <h3>Get your rental</h3>
             <p>Sign in to add items, schedule, and complete checkout.</p>
           </div>
         </div>
+        <p className="home-how-cta">
+          <Link to="/how-it-works" className="home-inline-link">
+            Read the full guide →
+          </Link>
+        </p>
       </div>
     </>
   );

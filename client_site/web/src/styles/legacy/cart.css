@@ -499,3 +499,30 @@ a {
       grid-template-columns: 1fr;
    }
 }
+
+/* Google Places (React mount) */
+.place-autocomplete-host {
+   width: 100%;
+}
+
+.place-autocomplete-host gmp-place-autocomplete,
+.place-autocomplete-host gmp-placeautocomplete,
+.place-autocomplete-host * {
+   width: 100%;
+   min-height: 44px;
+   box-sizing: border-box;
+}
+
+.place-autocomplete-host .place-autocomplete-input {
+   width: 100%;
+   min-height: 44px;
+   box-sizing: border-box;
+   padding: 0.5rem 0.75rem;
+   font: inherit;
+}
+
+#CartPage .notice.inline-notice,
+.inline-notice {
+   margin-top: 8px;
+   font-size: 12px;
+}

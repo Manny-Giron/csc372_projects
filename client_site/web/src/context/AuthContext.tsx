@@ -62,7 +62,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     refreshMe();
   }, [refreshMe]);
-
+  ////
+  ////
+  ////
+  ////
+  ////
+  ////
+  ////
+  ////
+  ////
+  ////
   const login = useCallback(async (email: string, password: string) => {
     const data = await api<{ token: string; user: User }>('/api/auth/login', {
       method: 'POST',
@@ -72,6 +81,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(data.user);
   }, []);
 
+  ////
+  ////
+  ////
+  ////
+  ////
+  ////
+  ////
+  ////
+  ////
+  ////
   const register = useCallback(
     async (p: {
       email: string;

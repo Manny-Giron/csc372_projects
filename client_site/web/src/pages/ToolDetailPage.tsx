@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
+import { ToolImage } from '../components/ToolImage';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import type { Tool } from '../types';
@@ -56,31 +57,69 @@ export function ToolDetailPage() {
   }
 
   return (
-    <div className="page-pad tool-detail">
-      <Link to="/tools">← Back to tools</Link>
-      <h1>{tool.name}</h1>
-      <p className="cat-label">{tool.category_name}</p>
-      <p className="tool-desc">{tool.description}</p>
-      <p>
-        <strong>${Number(tool.daily_rate).toFixed(2)}</strong> / day · Deposit{' '}
-        <strong>${Number(tool.deposit).toFixed(2)}</strong>
-      </p>
-      <p>{available} units available</p>
-      {tool.delivery_only ? <p className="note">Delivery + pickup only</p> : null}
-      <div className="add-row">
-        <label>
-          Qty{' '}
-          <input
-            type="number"
-            min={1}
-            max={Math.max(1, available)}
-            value={qty}
-            onChange={(e) => setQty(Number(e.target.value) || 1)}
-          />
-        </label>
-        <button type="button" className="btn-primary" onClick={handleAdd}>
-          {user ? 'Add to cart' : 'Sign in to add to cart'}
-        </button>
+    <div className="tool-detail">
+      <div className="page-pad tool-detail__inner">
+        <Link to="/tools" className="tool-detail__back">
+          ← Back to tools
+        </Link>
+
+        <div className="tool-detail__grid">
+          <div className="tool-detail__gallery">
+            <div className="tool-detail__image-frame">
+              <ToolImage
+                src={tool.image_url}
+                alt={tool.name}
+                className="tool-detail__hero-img"
+                variant="pdp"
+                loading="eager"
+              />
+            </div>
+            {tool.type_name ? (
+              <p className="tool-detail__type-hint fine-print">Type: {tool.type_name}</p>
+            ) : null}
+          </div>
+
+          <div className="tool-detail__buy">
+            <p className="tool-detail__eyebrow">{tool.category_name}</p>
+            <h1 className="tool-detail__title">{tool.name}</h1>
+            <div className="tool-detail__price-block">
+              <span className="tool-detail__price">
+                ${Number(tool.daily_rate).toFixed(2)}
+              </span>
+              <span className="tool-detail__price-unit"> / day</span>
+            </div>
+            <p className="tool-detail__deposit">
+              Deposit <strong>${Number(tool.deposit).toFixed(2)}</strong>
+            </p>
+            <p className="tool-detail__stock">
+              {available} {available === 1 ? 'unit' : 'units'} available to rent
+            </p>
+            {tool.delivery_only ? (
+              <p className="tool-detail__note note">Delivery + pickup only</p>
+            ) : null}
+
+            <div className="tool-detail__desc">
+              <h2 className="tool-detail__section-title">Description</h2>
+              <p className="tool-desc">{tool.description}</p>
+            </div>
+
+            <div className="tool-detail__actions add-row">
+              <label className="tool-detail__qty">
+                Qty{' '}
+                <input
+                  type="number"
+                  min={1}
+                  max={Math.max(1, available)}
+                  value={qty}
+                  onChange={(e) => setQty(Number(e.target.value) || 1)}
+                />
+              </label>
+              <button type="button" className="btn-primary tool-detail__cta" onClick={handleAdd}>
+                {user ? 'Add to cart' : 'Sign in to add to cart'}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
