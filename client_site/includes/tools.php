@@ -3,6 +3,7 @@
 Name: Emmanuel Giron
 Date: March 7, 2026
 Description: Dynamic tools page for Rocket Rentals.
+<<<<<<< HEAD
 This page reads a category from the URL, creates tool objects,
 and displays matching placeholder inventory for that category.
 */
@@ -11,6 +12,13 @@ and displays matching placeholder inventory for that category.
 // b/c of how many tools and categories there are, I used ChatGPT to help generate creations of the objects 
 // given the html files containing said data.
 // ALSO: GPT Helped me figure out the page query parameter. 
+=======
+This page reads a category from the URL query string, validates it
+against the database, and displays matching tools using prepared statements.
+*/
+
+require_once __DIR__ . '/db.php';
+>>>>>>> client_site_v5_php
 
 /**
  * RentalTool represents one rentable tool shown on the Rocket Rentals website.
@@ -64,15 +72,19 @@ class RentalTool
       return 'Standard rental';
    }
 
+<<<<<<< HEAD
    /**
     * Checks whether this tool belongs to the selected category.
     */
+=======
+>>>>>>> client_site_v5_php
    public function matchesCategory(string $category): bool
    {
       return $category === 'all' || $this->categoryKey === $category;
    }
 }
 
+<<<<<<< HEAD
 $categoryInfo = [
    'all' => [
       'title' => 'All Tools',
@@ -250,6 +262,86 @@ foreach ($tools as $tool) {
    }
 }
 
+=======
+/*
+Build $categoryInfo from the database for sidebar links and page headers.
+The 'all' entry is added manually since it has no DB row.
+*/
+$categoryInfo = [
+   'all' => [
+      'title' => 'All Tools',
+      'description' => 'Browse all available tools across every Rocket Rentals category.'
+   ]
+];
+
+$catStmt = $pdo->query(
+   "SELECT `key`, name, description FROM tool_categories ORDER BY sort_order"
+);
+$sidebarCategories = $catStmt->fetchAll();
+
+foreach ($sidebarCategories as $cat) {
+   $categoryInfo[$cat['key']] = [
+      'title' => $cat['name'],
+      'description' => $cat['description']
+   ];
+}
+
+/*
+Validate the category query string against known keys.
+Uses a prepared statement to confirm the key exists in the database.
+*/
+$selectedCategory = $_GET['category'] ?? 'all';
+
+if ($selectedCategory !== 'all') {
+   $validateStmt = $pdo->prepare(
+      "SELECT COUNT(*) FROM tool_categories WHERE `key` = :catKey"
+   );
+   $validateStmt->execute([':catKey' => $selectedCategory]);
+
+   if ($validateStmt->fetchColumn() === 0) {
+      $selectedCategory = 'all';
+   }
+}
+
+/*
+Retrieve tools from the database using a prepared statement.
+Joins through tool_types to tool_categories for category filtering.
+*/
+if ($selectedCategory === 'all') {
+   $toolStmt = $pdo->query(
+      "SELECT t.name, tc.`key` AS category_key, t.description, t.daily_rate, t.delivery_only
+       FROM tools t
+       JOIN tool_types tt  ON t.type_id = tt.id
+       JOIN tool_categories tc ON tt.category_id = tc.id
+       WHERE t.is_active = 1
+       ORDER BY tc.sort_order, t.name"
+   );
+} else {
+   $toolStmt = $pdo->prepare(
+      "SELECT t.name, tc.`key` AS category_key, t.description, t.daily_rate, t.delivery_only
+       FROM tools t
+       JOIN tool_types tt  ON t.type_id = tt.id
+       JOIN tool_categories tc ON tt.category_id = tc.id
+       WHERE t.is_active = 1 AND tc.`key` = :catKey
+       ORDER BY t.name"
+   );
+   $toolStmt->execute([':catKey' => $selectedCategory]);
+}
+
+$toolRows = $toolStmt->fetchAll();
+
+$filteredTools = [];
+foreach ($toolRows as $row) {
+   $filteredTools[] = new RentalTool(
+      $row['name'],
+      $row['category_key'],
+      $row['description'],
+      (float) $row['daily_rate'],
+      (bool) $row['delivery_only']
+   );
+}
+
+>>>>>>> client_site_v5_php
 $pageTitle = $categoryInfo[$selectedCategory]['title'];
 $pageDescription = $categoryInfo[$selectedCategory]['description'];
 ?>
@@ -378,12 +470,17 @@ $pageDescription = $categoryInfo[$selectedCategory]['description'];
          <aside class="category-sidebar" aria-label="Tool category navigation">
             <div class="sidebar-title-row">
                <h2 class="sidebar-title">Browse</h2>
+<<<<<<< HEAD
                <span class="sidebar-badge" aria-label="Placeholder data badge">Placeholder</span>
+=======
+               <span class="sidebar-badge" aria-label="Live data badge">Live</span>
+>>>>>>> client_site_v5_php
             </div>
 
             <nav class="category-nav">
                <a class="category-link <?php echo $selectedCategory === 'all' ? 'active' : ''; ?>"
                   href="tools.php?category=all">All Tools</a>
+<<<<<<< HEAD
                <a class="category-link <?php echo $selectedCategory === 'power' ? 'active' : ''; ?>"
                   href="tools.php?category=power">Power Tools</a>
                <a class="category-link <?php echo $selectedCategory === 'lawn' ? 'active' : ''; ?>"
@@ -396,12 +493,25 @@ $pageDescription = $categoryInfo[$selectedCategory]['description'];
                   href="tools.php?category=ladders">Ladders & Lifts</a>
                <a class="category-link <?php echo $selectedCategory === 'trailers' ? 'active' : ''; ?>"
                   href="tools.php?category=trailers">Trailers & Hauling</a>
+=======
+               <?php foreach ($sidebarCategories as $cat): ?>
+                  <a class="category-link <?php echo $selectedCategory === $cat['key'] ? 'active' : ''; ?>"
+                     href="tools.php?category=<?php echo htmlspecialchars(urlencode($cat['key'])); ?>">
+                     <?php echo htmlspecialchars($cat['name']); ?>
+                  </a>
+               <?php endforeach; ?>
+>>>>>>> client_site_v5_php
             </nav>
 
             <div class="sidebar-help" role="note">
                <p>
+<<<<<<< HEAD
                   <strong>Note:</strong> This page is using PHP objects to model tools and
                   dynamically render placeholder inventory by category.
+=======
+                  <strong>Note:</strong> Tools and categories are loaded from the database
+                  and filtered using prepared statements via PDO.
+>>>>>>> client_site_v5_php
                </p>
             </div>
          </aside>
@@ -410,15 +520,24 @@ $pageDescription = $categoryInfo[$selectedCategory]['description'];
          <div class="category-content">
             <div class="content-toolbar">
                <h2>
+<<<<<<< HEAD
                   Available Placeholder Tools
                   (
                   <?php echo count($filteredTools); ?>)
+=======
+                  Available Tools
+                  (<?php echo count($filteredTools); ?>)
+>>>>>>> client_site_v5_php
                </h2>
             </div>
 
             <p class="content-desc">
+<<<<<<< HEAD
                These listings are examples for the assignment and can later be connected
                to a real inventory database.
+=======
+               Browse tools from our rental inventory. Select a category to filter.
+>>>>>>> client_site_v5_php
             </p>
 
             <?php if (count($filteredTools) > 0): ?>
@@ -453,13 +572,21 @@ $pageDescription = $categoryInfo[$selectedCategory]['description'];
                </div>
             <?php else: ?>
                <div class="empty-state">
+<<<<<<< HEAD
                   No placeholder tools were found for this category yet.
+=======
+                  No tools were found for this category.
+>>>>>>> client_site_v5_php
                </div>
             <?php endif; ?>
 
             <footer class="page-footer">
                <p>
+<<<<<<< HEAD
                   Need a different tool category? Email us (placeholder):
+=======
+                  Need a different tool category? Email us:
+>>>>>>> client_site_v5_php
                   <a href="mailto:rocketrentals@example.com">rocketrentals@example.com</a>
                </p>
             </footer>

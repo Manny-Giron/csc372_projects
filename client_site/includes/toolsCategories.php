@@ -3,6 +3,7 @@
 Name: Emmanuel Giron
 Date: March 7, 2026
 Description: Tool categories landing page for Rocket Rentals.
+<<<<<<< HEAD
 This PHP version keeps the same page structure and styling as the static version,
 but now renders category data dynamically using PHP objects.
 */
@@ -11,6 +12,13 @@ but now renders category data dynamically using PHP objects.
 // b/c of how many tools and categories there are, I used ChatGPT to help generate creations of the objects 
 // given the html files containing said data.
 // ALSO: GPT Helped me figure out the page query parameter. 
+=======
+Categories and sample tool names are now pulled from the database
+using PDO instead of hardcoded PHP arrays.
+*/
+
+require_once __DIR__ . '/db.php';
+>>>>>>> client_site_v5_php
 
 /**
  * ToolCategory represents one visible category on the Rocket Rentals site.
@@ -79,6 +87,7 @@ class ToolCategory
 }
 
 /*
+<<<<<<< HEAD
 Create category objects.
 These replace the repeated hard-coded category blocks from the static page.
 */
@@ -121,6 +130,38 @@ $categories = [
       ['Utility Trailer (placeholder)', 'Dump Trailer (placeholder)', 'Hand Truck (placeholder)']
    )
 ];
+=======
+Query categories from the database and build ToolCategory objects.
+Sample tool names are pulled via GROUP_CONCAT through tool_types → tools.
+*/
+$catStmt = $pdo->query(
+   "SELECT tc.id, tc.`key`, tc.name, tc.description, tc.featured,
+           GROUP_CONCAT(t.name ORDER BY t.name SEPARATOR '||') AS sample_tools
+    FROM tool_categories tc
+    LEFT JOIN tool_types tt ON tt.category_id = tc.id
+    LEFT JOIN tools t       ON t.type_id = tt.id AND t.is_active = 1
+    GROUP BY tc.id
+    ORDER BY tc.sort_order"
+);
+$catRows = $catStmt->fetchAll();
+
+$categories = [];
+foreach ($catRows as $row) {
+   $sampleTools = [];
+   if (!empty($row['sample_tools'])) {
+      $allTools = explode('||', $row['sample_tools']);
+      $sampleTools = array_slice($allTools, 0, 3);
+   }
+
+   $categories[] = new ToolCategory(
+      $row['name'],
+      $row['key'],
+      $row['description'],
+      $sampleTools,
+      (bool) $row['featured']
+   );
+}
+>>>>>>> client_site_v5_php
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -158,8 +199,13 @@ $categories = [
       <header class="page-hero">
          <h1>Browse Tools by Category</h1>
          <p class="subtext">
+<<<<<<< HEAD
             Delivery + pickup tool rentals. These categories are placeholders until we connect our real inventory
             database.
+=======
+            Delivery + pickup tool rentals. Browse our categories below to find the right equipment for your
+            project.
+>>>>>>> client_site_v5_php
          </p>
       </header>
 
@@ -168,7 +214,11 @@ $categories = [
          <aside class="category-sidebar" aria-label="Tool category navigation">
             <div class="sidebar-title-row">
                <h2 class="sidebar-title">Categories</h2>
+<<<<<<< HEAD
                <span class="sidebar-badge" aria-label="Placeholder data badge">Placeholder</span>
+=======
+               <span class="sidebar-badge" aria-label="Live data badge">Live</span>
+>>>>>>> client_site_v5_php
             </div>
 
             <nav class="category-nav">
@@ -184,8 +234,13 @@ $categories = [
 
             <div class="sidebar-help" role="note">
                <p>
+<<<<<<< HEAD
                   <strong>Note:</strong> Categories are now generated dynamically with PHP objects.
                   Later, these can connect to a real backend and inventory database.
+=======
+                  <strong>Note:</strong> Categories are loaded from the database and rendered
+                  dynamically with PHP objects via PDO.
+>>>>>>> client_site_v5_php
                </p>
             </div>
          </aside>
@@ -203,11 +258,21 @@ $categories = [
             </div>
 
             <p class="content-desc">
+<<<<<<< HEAD
                Choose a category to see placeholder tool listings. Later, this will display real inventory and
                availability.
             </p>
 
             <div class="category-grid" id="categoryGrid">
+=======
+               Choose a category to see available tool listings from our inventory.
+            </p>
+
+            <div class="category-grid" id="categoryGrid">
+               <?php if (empty($categories)): ?>
+                  <p>No categories are available at this time.</p>
+               <?php endif; ?>
+>>>>>>> client_site_v5_php
                <?php foreach ($categories as $category): ?>
                   <!-- Objects are used here to dynamically render each category card -->
                   <a class="category-card" href="<?php echo htmlspecialchars($category->getCategoryUrl()); ?>"
